@@ -155,7 +155,7 @@ def ui(req):
                     return web.Response(status=403, body=b"Player Slot Full")
                 else:
                     if movement == "UP":
-                        if not req.app['control'].ui['pong']['playerPaddle'][player]>=6:
+                        if not req.app['control'].ui['pong']['playerPaddle'][player]>=5:
                             req.app['control'].ui['pong']['playerPaddle'][player]+=1;
                         return web.Response(body=b"OK")
                     elif movement == "DOWN":

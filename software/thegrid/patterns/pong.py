@@ -28,7 +28,7 @@ class Pong(Pattern):
     def game_reset(self):
         self.tracking['pong']['playerPaddle'] = [2, 2]
         self.tracking['pong']['reset'] = 0
-        self.ball = [0, 0]
+        self.ball = [0.0, 0.0]
         self.ballv = [2, 1]
         self.tracking['pong']['waitingForPlayers'] = [1, 1]
         self.gameState = 1
@@ -73,35 +73,39 @@ class Pong(Pattern):
         # Draw paddles
         grid[0, self.tracking['pong']['playerPaddle'][0]] = (255, 255, 255)
         grid[0, self.tracking['pong']['playerPaddle'][0]+1] = (255, 255, 255)
+        grid[0, self.tracking['pong']['playerPaddle'][0]+2] = (255, 255, 255)
         
         grid[6, self.tracking['pong']['playerPaddle'][1]] = (255, 255, 255)
         grid[6, self.tracking['pong']['playerPaddle'][1]+1] = (255, 255, 255)
+        grid[6, self.tracking['pong']['playerPaddle'][1]+2] = (255, 255, 255)
         
         ## Else game is on
         if self.gameState==1:
-            self.ball = [3, 3]
-            self.ballv = [1-(random.randint(0,1)*2), 1-(random.randint(0,1)*2)]
+            self.ball = [3.0, 3.0]
+            self.ballv = [0.05-(random.randint(0,1)/10), 0.05-(random.randint(0,1)/10)]
             self.gameState = 2
             return grid, 1.0
         
         self.ball[0] += self.ballv[0]
         self.ball[1] += self.ballv[1]
         
-        if self.ball[0] >= 6:
-            if self.ball[1] == self.tracking['pong']['playerPaddle'][1] or self.ball[1] == self.tracking['pong']['playerPaddle'][1]+1:  
+        if self.ball[0] >= 5.5:
+            if self.ball[1] == self.tracking['pong']['playerPaddle'][1] or self.ball[1] == self.tracking['pong']['playerPaddle'][1]+1 or self.ball[1] == self.tracking['pong']['playerPaddle'][1]+2:  
                 self.ballv[0] = -self.ballv[0]
             else: # Miss!
                 self.gameState = 1
                 grid[6, self.tracking['pong']['playerPaddle'][1]] = (255, 0, 0)
                 grid[6, self.tracking['pong']['playerPaddle'][1]+1] = (255, 0, 0)
+                grid[6, self.tracking['pong']['playerPaddle'][1]+2] = (255, 0, 0)
                 return grid, 1.0
-        if self.ball[0] <= 0:
-            if self.ball[1] == self.tracking['pong']['playerPaddle'][0] or self.ball[1] == self.tracking['pong']['playerPaddle'][0]+1:  
+        if self.ball[0] <= 0.5:
+            if self.ball[1] == self.tracking['pong']['playerPaddle'][0] or self.ball[1] == self.tracking['pong']['playerPaddle'][0]+1 or self.ball[1] == self.tracking['pong']['playerPaddle'][0]+2:  
                 self.ballv[0] = -self.ballv[0]
             else: # Miss!
                 self.gameState = 1
                 grid[0, self.tracking['pong']['playerPaddle'][0]] = (255, 0, 0)
                 grid[0, self.tracking['pong']['playerPaddle'][0]+1] = (255, 0, 0)
+                grid[0, self.tracking['pong']['playerPaddle'][0]+2] = (255, 0, 0)
                 return grid, 1.0
         # Ball bounces off sides
         if self.ball[1] >= 6:
@@ -109,6 +113,6 @@ class Pong(Pattern):
         if self.ball[1] <= 0:
             self.ballv[1] = -self.ballv[1]
         
-        grid[self.ball[0], self.ball[1]] = (255, 255, 255)
+        grid[int(self.ball[0]), int(self.ball[1])] = (255, 255, 255)
 
-        return grid, 0.5
+        return grid, 0.1
